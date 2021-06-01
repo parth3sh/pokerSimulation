@@ -1,14 +1,16 @@
-from poker import Card
-
+import treys
+from treys import Deck
+from treys import Card
+import random
 
 
 class Player:
     chipcount = 0
-    cards = []
+    hand = None
     def __init__(self, startingChipCount):
         self.chipcount = startingChipCount
-    def setHand(self, card1, card2):
-        self.cards = [card1, card2]
+    def setHand(self, hand):
+        self.hand = hand
     def resetHand(self):
         self.cards = []
 
@@ -49,20 +51,31 @@ def play(numPlayer, startingChipCount):
     blindsArr = [0,0,0]
     blindsArr = setblinds(first,numPlayer, blindsArr)
     first = False
-    smallBAmt = input("Small blind amount:") 
-    bibBAmt = input("Big blind amount:") 
+    smallBAmt = int(input("Small blind amount:"))
+    bigBAmt = int(input("Big blind amount:"))
 
     #while game is being played
     while continueGame:
+        #load deck
+        deck = Deck()
         pot = 0        
         #take blind bets
         pot = smallBAmt + bigBAmt
         players[blindsArr[1]].chipcount = players[blindsArr[1]].chipcount - smallBAmt
         players[blindsArr[2]].chipcount = players[blindsArr[2]].chipcount - bigBAmt
         #deal 2 cards to each player
-        dealCards(deck)
+        for player in players:
+            player.hand = deck.draw(2)
+        activePlayers = players
+        board = []
+        for x in range (5):
+            board.append(deck.draw(1))
         #preflop betting round
-        preflopBets()
+        if (blindsArr[2] + 1 > numPlayer - 1):
+            action = 0
+        else:
+            action = blindsArr[2] + 1
+        randomNum = random.uniform(0, 1)            
         #flop
         flop()
         flopBets()
