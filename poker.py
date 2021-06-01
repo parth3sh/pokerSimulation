@@ -1,4 +1,6 @@
-import poker
+from poker import Card
+
+
 
 class Player:
     chipcount = 0
@@ -10,12 +12,32 @@ class Player:
     def resetHand(self):
         self.cards = []
 
-def setblinds(first, numPlayer,bigB,smallB,dealer):
+
+def setblinds(first, numPlayer, blindsArr):
     if numPlayer > 2:
-        smallB = 0
-        bigB = 1
-
-
+        if first:
+            blindsArr[2] = 2
+            blindsArr[1] = 1
+            blindsArr[0] = 0
+        else:
+            if bigB + 1 > numPlayer - 1:
+                blindsArr[0] = blindsArr[1]
+                blindsArr[1] = blindsArr[2]
+                blindsArr[2] = 0 
+            else:
+                blindsArr[0] = blindsArr[1]
+                blindsArr[1] = blindsArr[2]
+                blindsArr[2] = blindsArr[2] + 1
+    else:
+        if first:
+            blindsArr[0] = 0
+            blindsArr[1] = 0
+            blindsArr[2] = 1
+        else:
+            blindsArr[1] = blindsArr[2]
+            blindsArr[2] = blindsArr[0]
+            blindsArr[0] = blindsArr[1]
+    return blindsArr
 def play(numPlayer, startingChipCount):
     continueGame = True
     players = []
@@ -23,14 +45,20 @@ def play(numPlayer, startingChipCount):
         tempPlayer = Player(startingChipCount)
         players.append(tempPlayer)
     #set which players are big,small blind and dealer
-    bigb,smallB,dealer
     first = True
-    setblinds(first, numPlayer,bigB,smallB,dealer)
+    blindsArr = [0,0,0]
+    blindsArr = setblinds(first,numPlayer, blindsArr)
+    first = False
+    smallBAmt = input("Small blind amount:") 
+    bibBAmt = input("Big blind amount:") 
+
     #while game is being played
     while continueGame:
-        first = False
+        pot = 0        
         #take blind bets
-        blindBets()
+        pot = smallBAmt + bigBAmt
+        players[blindsArr[1]].chipcount = players[blindsArr[1]].chipcount - smallBAmt
+        players[blindsArr[2]].chipcount = players[blindsArr[2]].chipcount - bigBAmt
         #deal 2 cards to each player
         dealCards(deck)
         #preflop betting round
