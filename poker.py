@@ -1,18 +1,37 @@
-from deck_of_cards import deck_of_cards
+import poker
 
 def dealCards(deck):
     return 0
-
-if __name__ == "__main__":
-    #create deck
-    deck = deck_of_cards.DeckOfCards()
+def run():
     #get number of players
-    numPlayers = getPlayers()
+    numPlayers = input("Number of players:")
+    #play game
+    play(numPlayers)
+
+def play(numPlayer):
+    continueGame = True
     #while game is being played
-    while true:
+    while continueGame:
         #take blind bets
         blindBets()
         #deal 2 cards to each player
         dealCards(deck)
         #preflop betting round
-        
+        preflopBets()
+        #flop
+        flop()
+        flopBets()
+        #turn
+        turnbets()
+        #river
+        riverbets()
+        #showdown
+        showdown()
+        #deal another hand?
+        checkGame()
+
+if __name__ == "__main__":
+    run()
+
+
+
